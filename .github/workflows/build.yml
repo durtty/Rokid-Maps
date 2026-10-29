@@ -13,12 +13,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Auto Accept Licenses & Init
-        run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          touch local.properties
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          chmod +x gradlew
+      - name: Grant Execute Permission
+        run: chmod +x gradlew
 
       - name: Build Debug APKs
         run: ./gradlew assembleDebug --no-daemon
