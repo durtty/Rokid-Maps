@@ -1,0 +1,25 @@
+name: Build APK
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Build Debug APKs
+        run: |
+          cp local.properties.template local.properties || true
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rokid-maps-apks
+          path: |
+            phone/build/outputs/apk/debug/*.apk
+            glasses/build/outputs/apk/debug/*.apk
